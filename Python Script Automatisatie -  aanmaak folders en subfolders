@@ -1,24 +1,43 @@
-from tkinter import filedialog
-from tkinter import *
-import shutil
 import os
+import logging
 
-# Tkinter aanmaken en scherm verbergen
-root = Tk()
-root.withdraw()
+#------------------------------ LOGGER CODE ------------------------------#
 
-# Selecteer van welke map je een backup wilt
-folder_path = filedialog.askdirectory(title='Selecteer de folder die je wilt backuppen')
+# Een logger-object aanmaken
+logger = logging.getLogger('EmailHandtekenignen')
+logger.setLevel(logging.DEBUG)
 
+# Een document aanmaken om berichten naar een bestand te loggen
+handler = logging.FileHandler('app.log')
+handler.setLevel(logging.DEBUG)
+
+# Het logberichtformaat
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# De gebruiker aan de logger koppelen
+logger.addHandler(handler)
+
+logger.info('---- CODE WERD UITGEVOERD ----')
+
+#------------------------------ AANMAKEN VAN MAPPEN ------------------------------#
+
+with open('departementen.csv', 'r', encoding='utf-8-sig') as file:
+    departementen = file.readlines()
+
+# Checkt als de Hoofdfolder bestaat
+if os.path.exists('C:/Emailhandtekeningen'):
+    print('---- DOCUMENTEN BESTAAN AL ----')
+    logger.info('---- DOCUMENTEN BESTAAN AL ----')
+
+else:
 # Hoofdfolder aanmaken
-os.makedirs('C:/Backup', exist_ok=True)
+    os.makedirs('C:/Emailhandtekeningen', exist_ok=True)
+    logger.info('Map Emailhandtekeningen werd aangemaakt')
 
-# Backup foler aanmaken
-folder_name = os.path.basename(folder_path)
-backup_folder = os.path.join('C:/Backup', folder_name)
-
-# Originele folder naar backup folder kopiëren
-shutil.copytree(folder_path, 'C:/Backup', dirs_exist_ok=True)
-print(f"---- BACKUP SUCCESVOL AANGEMAAKT ----")
-print(f"Folder: {folder_path}")
-print(f"Backup: C:/Backup")
+# Departments aanmaken
+    for departement in departementen:
+        departement = departement.strip()
+        documenten = os.path.join('C:/Emailhandtekeningen', departement)
+        os.mkdir(documenten)
+        logger.info(f'Map {departement} werd aangemaakt')
