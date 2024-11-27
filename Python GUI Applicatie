@@ -1,0 +1,96 @@
+from tkinter import *
+from tkinter import messagebox
+import os
+
+
+# messagebox en opslaan van documenten
+def Message_Box_En_Save():
+    voornaam_data = voornaam.get()
+    achternaam_data = achternaam.get()
+    studentenNr_data = studentenNr.get()
+    klas_data = keuzeklas.get()
+    geslacht_data = keuzegeslacht.get()
+
+    # Mssagebox
+    if '' in (voornaam_data, achternaam_data, studentenNr_data):
+        messagebox.showerror(title='ONGELDIGE INVOER', message='VUL ALLE VELDEN IN')
+    else:
+        Bevestiging = messagebox.askquestion(title='Bevestiging', message=f'Voornaam: {voornaam_data}\nAchternaam: {achternaam_data}\nStudentennummer: {studentenNr_data}\nKlas: {klas_data}\nGeslacht: {geslacht_data}\n\nBen je zeker dat je de juiste informatie het ingevoerd?')
+
+        # Opslaan van documenten
+        if Bevestiging == 'yes':
+            with open('Klassen data/' + klas_data, 'a') as file:
+                file.write(f' Voornaam: {voornaam_data} | Achternaam: {achternaam_data} | Studentennummer: {studentenNr_data} | Geslacht: {geslacht_data}\n')
+            voornaam.delete(0, END)
+            achternaam.delete(0, END)
+            studentenNr.delete(0, END)
+
+#---------------------------------Documenten Aanmaken---------------------------------#
+
+# Folder en .txt documenten aanmaken
+klassen = ['5BI', '6BI', '6WEWI', '6WEWE', '6ECW']
+if os.path.exists('Klassen data'):
+    print('---- DOCUMENTEN BESTAAN AL ----')
+else:
+    os.makedirs('Klassen data', exist_ok=True)
+    for klas in klassen:
+        klas_document = os.path.join('Klassen data', klas)
+        with open(klas_document, 'w') as file:
+            file.write('')
+
+#-----------------------------------------------------UI Aanmaken-----------------------------------------------------#
+
+# Tkinter setup
+root = Tk()
+root.title('leerlingenfiches')
+root.minsize(width=450, height=450)
+
+# Witte ruimte linkerkant
+witte_ruimte = Label(root, width=20, text=(' '))
+witte_ruimte.grid(row=0, column=0)
+
+# Invoer voor Voornaam
+voornaamlabel = Label(root, text=('Voornaam '))
+voornaamlabel.grid(row=6, column=1)
+voornaam = Entry(root, width=30)
+voornaam.grid(row=7, column=1)
+
+# Invoer voor Achternaam
+achternaamlabel = Label(root, text=('Achternaam '))
+achternaamlabel.grid(row=8, column=1)
+achternaam = Entry(root, width=30)
+achternaam.grid(row=9, column=1)
+
+# Invoer voor email
+studentenNrlabel = Label(root, text=('Studentennummer '))
+studentenNrlabel.grid(row=10, column=1)
+studentenNr = Entry(root, width=30)
+studentenNr.grid(row=11, column=1)
+
+#------------------------------------DropDown Code------------------------------------#
+
+# Dropdown voor klas
+keuzeklas = StringVar(root)
+keuzeklas.set('6BI')
+
+klaslabel = Label(root, text=('Klas'))
+klaslabel.grid(row=4, column=1)
+klas = OptionMenu(root, keuzeklas, '5BI', '6BI', '6WEWI', '6WEWE', '6ECW')
+klas.grid(row=5, column=1)
+
+# Dropdown voor geslacht
+keuzegeslacht = StringVar(root)
+keuzegeslacht.set('M')
+
+geslachtlabel = Label(root, text=('Geslacht'))
+geslachtlabel.grid(row=12, column=1)
+geslacht = OptionMenu(root, keuzegeslacht, 'M', 'V')
+geslacht.grid(row=13, column=1)
+
+#------------------------------------Button Aanmaken----------------------------------#
+
+# Knoppen maken
+button_add = Button(root, width=20, height=3, text=('Toevoegen'), command=Message_Box_En_Save)
+button_add.grid(row=14, column=1)
+
+root.mainloop()
