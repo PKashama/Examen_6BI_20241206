@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import os
 
-
+ 
 # messagebox en opslaan van documenten
 def Message_Box_En_Save():
     voornaam_data = voornaam.get()
