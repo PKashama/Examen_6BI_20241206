@@ -1,0 +1,45 @@
+import os
+import logging
+
+#------------------------------ LOGGER CODE ------------------------------#
+
+# Een logger-object aanmaken
+logger = logging.getLogger('EmailHandtekenignen')
+logger.setLevel(logging.DEBUG)
+
+# Een document aanmaken om berichten naar een bestand te loggen
+handler = logging.FileHandler('app.log')
+handler.setLevel(logging.DEBUG)
+
+# Het logberichtformaat
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# De gebruiker aan de logger koppelen
+logger.addHandler(handler)
+
+logger.info(f'---- CODE WERD UITGEVOERD ----')
+
+#------------------------------ AANMAKEN VAN MAPPEN ------------------------------#
+
+with open('departementen.csv', 'r', encoding='utf-8-sig') as file:
+    departementen = file.readlines()
+
+# Checkt als de Hoofdfolder bestaat
+if os.path.exists('C:/Emailhandtekeningen'):
+    print('---- DOCUMENTEN BESTAAN AL ----')
+    logger.info(f'---- DOCUMENTEN BESTAAN AL ----')
+
+else:
+# Hoofdfolder aanmaken
+    os.makedirs('C:/Emailhandtekeningen', exist_ok=True)
+    logger.info('Map Emailhandtekeningen werd aangemaakt')
+
+# Departments aanmaken
+    for departement in departementen:
+        departement = departement.strip()
+        documenten = os.path.join('C:/Emailhandtekeningen', departement)
+        os.mkdir(documenten)
+        logger.info(f'Map {departement} werd aangemaakt')
+
+# logger.debug('Dit is een debugbericht.')
