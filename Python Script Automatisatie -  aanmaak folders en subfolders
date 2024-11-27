@@ -1,0 +1,24 @@
+from tkinter import filedialog
+from tkinter import *
+import shutil
+import os
+
+# Tkinter aanmaken en scherm verbergen
+root = Tk()
+root.withdraw()
+
+# Selecteer van welke map je een backup wilt
+folder_path = filedialog.askdirectory(title='Selecteer de folder die je wilt backuppen')
+
+# Hoofdfolder aanmaken
+os.makedirs('C:/Backup', exist_ok=True)
+
+# Backup foler aanmaken
+folder_name = os.path.basename(folder_path)
+backup_folder = os.path.join('C:/Backup', folder_name)
+
+# Originele folder naar backup folder kopiëren
+shutil.copytree(folder_path, 'C:/Backup', dirs_exist_ok=True)
+print(f"---- BACKUP SUCCESVOL AANGEMAAKT ----")
+print(f"Folder: {folder_path}")
+print(f"Backup: C:/Backup")
